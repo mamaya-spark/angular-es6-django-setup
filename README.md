@@ -1,4 +1,4 @@
-# Angular ES6 with Webpack2 and Gulp
+# Angular ES6 on Django Setup
 
 This guide will take you through how to set up an Angular project using ES6 on a Django server.
 
