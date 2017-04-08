@@ -152,7 +152,7 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
     STATIC_URL = '/static/'
     ```
 
-## 4. Set up routes.
+## 4. Set up your first route.
 
 In `<project>/<project>/urls.py`, add the following code:
 
@@ -199,3 +199,60 @@ def index(request):
 ```
 
 Don't worry about the `webpack-assets.json` file for now. It will be auto-generated later on.
+
+## 5. Initialize your app as a `node` module.
+
+In order to take advantage of front-end dev tools like `Webpack2` and `Gulp`, we need set up our `<app>` root folder as a `node` module. Normally you would use `npm` for this, but I'm going to use `yarn` here instead. You could do the same thing with `npm`, but `yarn` makes it easier to freeze version numbers across different environments.
+
+In your `<app>` folder, run:
+
+```bash
+$ yarn init
+```
+
+Go through all the questions until you reach the end. A `package.json` file should have been generated that looks something like this:
+
+```json
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Example app.",
+  "main": "index.js",
+  "author": "m-amaya",
+  "license": "MIT"
+}
+```
+
+Next, we're going to install all of our dependencies in one go:
+
+```bash
+$ yarn add angular angular-animate angular-cookies angular-nvd3 angular-ui-router assets-webpack-plugin babel-core babel-loader babel-preset-es2015 compression-webpack-plugin css-loader d3@^3.4.4 del extract-text-webpack-plugin gulp html-loader jquery ng-annotate-loader ng-lodash node-sass normalize.css nvd3 postcss-loader sass-loader socket.io-client uglify-js uglifyjs-webpack-plugin webpack webpack-stream
+```
+
+Your `package.json` should now have a list of all these dependencies. All of these dependencies should have been installed in the `node_modules` folder. And, a `yarn.lock` file should have been generated that locks down the dependency versions.
+
+Before we move on to generating our Angular app, let's compare project directories:
+
+```
+.
+└── project
+    ├── app
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── migrations
+    │   │   └── __init__.py
+    │   ├── models.py
+    |   ├-- node_modules
+    │   ├── package.json
+    │   ├── tests.py
+    │   ├── urls.py
+    │   ├── views.py
+    │   └── yarn.lock
+    ├── manage.py
+    └── project
+        ├── __init__.py
+        ├── settings.py
+        ├── urls.py
+        └── wsgi.py
+```
