@@ -1,0 +1,31 @@
+# Local Env
+# ================== #
+.dev.env.local
+
+# Directories
+# ================== #
+node_modules
+.venv
+
+# Generated Assets
+# ================== #
+**/static/**/*.js
+**/static/**/*.css
+**/static/**/*.map
+**/static/**/*.gz
+webpack-assets.json
+
+# IDE Files
+# ================== #
+.idea/
+/.idea/workspace.xml
+**.idea/misc.xml
+
+# Miscellaneous
+# ================== #
+.DS_Store
+npm-debug.log
+npm-debug.log.*
+dumb.rdb
+**.pyc
+__pycache__
