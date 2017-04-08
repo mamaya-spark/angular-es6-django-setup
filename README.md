@@ -91,8 +91,9 @@ Your project directory should now look like this:
 
 Go into your `settings.py` file and mimic the example `project-settings/settings.py` file in this repo. Here are the most important changes:
 
-- [ ] Move the secret key into the `DJANGO_SECRET_KEY` environment variable in `.env`.
-- [ ] Capture all the environment variables from your `.env` files.
+- [x] Move the secret key into the `DJANGO_SECRET_KEY` environment variable in `.env`.
+- [x] Add or remove necessary apps in `INSTALLED_APPS`.
+- [x] Capture all the environment variables from your `.env` files.
 
     ```python
     DJANGO_ENV       = os.environ['DJANGO_ENV']
@@ -106,7 +107,7 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
     APP_PSQL_DB_PORT = os.environ['APP_PSQL_DB_PORT']
     ```
 
-- [ ] Turn `DEBUG` on/off based on `DJANGO_ENV`.
+- [x] Turn `DEBUG` on/off based on `DJANGO_ENV`.
 
     ```python
     if DJANGO_ENV == 'production':
@@ -115,7 +116,7 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
         DEBUG = True
     ```
 
-- [ ] Place `APP_IP` and `APP_BACKEND_IP` in `ALLOWED_HOSTS` array.
+- [x] Place `APP_IP` and `APP_BACKEND_IP` in `ALLOWED_HOSTS` array.
 
     ```python
     ALLOWED_HOSTS = [
@@ -124,8 +125,7 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
     ]
     ```
 
-- [ ] Add or remove necessary apps in `INSTALLED_APPS`.
-- [ ] Switch your `DATABASES` engine to postgres, using the environment variables as the credentials.
+- [x] Switch your `DATABASES` engine to postgres, using the environment variables as the credentials.
 
     ```python
     DATABASES = {
@@ -140,7 +140,7 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
     }
     ```
 
-- [ ] Route the `/static/` url to your `static` directory (which doesn't exist yet, but will in a moment).
+- [x] Route the `/static/` url to your `static` directory (which doesn't exist yet, but will in a moment).
 
     ```python
     STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -151,3 +151,51 @@ Go into your `settings.py` file and mimic the example `project-settings/settings
 
     STATIC_URL = '/static/'
     ```
+
+## 4. Set up routes.
+
+In `<project>/<project>/urls.py`, add the following code:
+
+```python
+from django.conf.urls import include#, url
+# from django.contrib import admin
+
+urlpatterns = [
+    # (optional) you can keep the admin route if you're going to use it
+    # otherwise, go ahead and delete it
+    # url(r'^admin/', admin.site.urls),
+    url(r'^', include('amb_app.urls')),
+]
+```
+
+Then, in `<project>/<app>/`, create a `urls.py` file and add the following code:
+
+```python
+from django.conf.urls import url
+from <app> import views
+
+urlpatterns = [
+    url(r'^$', views.index, name='index')
+]
+```
+
+Lastly, in your `views.py` file, set up the `index` view:
+
+```python
+from django.shortcuts import render
+from django.http import JsonResponse
+
+import os
+import json
+
+def index(request):
+    root                = os.path.dirname(os.path.abspath(__file__))
+    webpack_assets_path = os.path.join(root, 'webpack-assets.json')
+
+    with open(webpack_assets_path) as webpack_assets_file:
+        assets = json.load(webpack_assets_file)
+
+    return render(request, 'index.html', { 'assets': assets })
+```
+
+Don't worry about the `webpack-assets.json` file for now. It will be auto-generated later on.
